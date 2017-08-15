@@ -15,7 +15,7 @@ AT_BOT = "<@" + BOT_ID + ">"
 committeeArrayTest = []
 #TODO: Setup SQL pulls and sets
 pointArray = [100, 90, 90, 85, -1, 0, 0, 0, 0, 0, 40, 40, 30, 30, 10]
-committeeArray = ["DISEC", "Security Council", "Joint", "Sec Assistants", "IPC", "Ad Hoc 9/11", "Antebellum Senate", \
+committeeArray = ["DISEC", "Security Council", "Joint", "Sec Assistants", "IPC", "Ad Hoc 9/11", "Antebellum Senate",  
     "First National Assembly of Greece", "Global Intel", "Arab League", "UNICEF", "African Union", "UNEP", "SOCHUM", "SpecPol"]
 CommitteeCount = 0
 
@@ -190,7 +190,7 @@ def list_commands(userID):
     """
         Returns a list of commands
     """
-    commandList = ["scoreboard", "add <score> <committee>", "remove <score> <committee>", "joke", "about"]
+    commandList = ["scoreboard", "add <score> <committee>", "remove <score> <committee>", "joke", "copypasta", "about"]
     response = "Here's a list of commands:\n"
     userName = get_user_name(userID)
 
@@ -207,6 +207,29 @@ def trivia():
 def about():
     return "Coded in *Python* with :heart: by <@" + TOKENS.JAMES_ID + "|James>"
 
+def copyPasta(command, userID):
+
+    target = command.split(" ", 2)
+    
+    try:
+        pastaName = get_user_name(target[1][2:-1].upper())
+    except IndexError:
+        pastaName = "None"
+
+    if(pastaName == "None"):
+        return "*Invalid command*: Did you @ someone incorrectly?"
+
+    textPasta = "Here is what I have to say about the above paragraph: nobody \"makes a final point\" just for the sake of it. " + \
+    "The final point was posted for the purpose of promoting some sort of argument, we can assume within MUNUM itself. " + \
+    "In general, we always \"make a final point\" with the purpose of promoting an argument, this is not a controversial fact. " + \
+    "So we have to naturally ask ourselves: (a) what argument was " + pastaName + " trying to promote, " + \
+    "and (b) what would the effects of this argument being accepted have been on " + pastaName +" himself, his peers, and in general on MUNUM. " + \
+    "\nI believe this methodology very quickly lays bare what the \"final point\" truly was, once the obtuse language and logical jumps (whether valid or not) are stripped out. " + \
+    "When asking myself these questions, I find it very difficult to come to any conclusion but the following: " + \
+    pastaName + "'s ultimate goal was to transform the culture and ideology of MUNUM and perhaps the university as a whole to be more homogeneous and more like him, at the expense of other ideologies."
+    
+    return textPasta
+
 
 
 def handle_command(command, channel, userID):
@@ -220,7 +243,9 @@ def handle_command(command, channel, userID):
         response = print_all_scores(userID)
     elif command.startswith("joke"):
         #TODO: abstract into another function
-        response = "The MLB"
+        response = "Nicco's virtue signaling about emojis."
+    elif command.startswith("copypasta"):
+    	response = copyPasta(command, userID)
     elif command.startswith("add"):
         response = modify_score(command, '+', userID)
     elif command.startswith("remove"):
